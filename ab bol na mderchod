@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Funny Website</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background-color: #000;
+            color: white;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-top: 100px;
+            font-size: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            margin: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+        }
+
+        #yesBtn {
+            background-color: green;
+            color: white;
+        }
+
+        #noBtn {
+            position: absolute;
+            background-color: red;
+            color: white;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Mere se loge kya? 😏</h1>
+
+<button id="yesBtn" onclick="startFireworks()">Haan yaar tum mere papa ho 😄</button>
+<button id="noBtn" onmouseover="moveButton()">Nahi dunga</button>
+
+<canvas id="canvas"></canvas>
+
+<script>
+let moveCount = 0;
+
+function moveButton() {
+    if (moveCount < 100) {
+        let x = Math.random() * (window.innerWidth - 100);
+        let y = Math.random() * (window.innerHeight - 50);
+
+        let btn = document.getElementById("noBtn");
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+
+        moveCount++;
+    }
+}
+
+// 🎆 Fireworks
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function startFireworks() {
+    for (let i = 0; i < 100; i++) {
+        particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            dx: (Math.random() - 0.5) * 10,
+            dy: (Math.random() - 0.5) * 10,
+            life: 100
+        });
+    }
+}
+
+function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p, index) => {
+        ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,50%)";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.dx;
+        p.y += p.dy;
+        p.life--;
+
+        if (p.life <= 0) {
+            particles.splice(index, 1);
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
